@@ -47,6 +47,14 @@
           <button class="small" id="stop" aria-label="Parar a fala">⏹</button>
         </div>
         <div class="chips" id="chips"></div>
+        <div class="card tasks" id="tasksCard">
+          <h3>✅ Tarefas</h3>
+          <div class="row" style="margin-bottom:8px"><input class="txt" id="taskIn" placeholder="nova tarefa (ex.: ligar pro contador)" autocomplete="off"><input class="txt" id="taskDue" type="date" style="flex:0 0 140px"></div>
+          <div id="taskList" class="mut">Carregando...</div>
+          <h3 style="margin-top:16px">⏰ Lembretes</h3>
+          <div class="row" style="margin-bottom:8px"><input class="txt" id="remIn" placeholder="novo lembrete" autocomplete="off"><input class="txt" id="remAt" type="datetime-local" style="flex:0 0 190px"></div>
+          <div id="remList" class="mut">Carregando...</div>
+        </div>
       </div>
     </section>
 
@@ -101,6 +109,10 @@
       <div class="card"><div class="mut" id="digestDay"></div><div id="digestText" class="digest"></div>
         <div class="btnrow"><button class="btn" id="digestListen">🔊 Ouvir</button><button class="btn ghost" id="digestNow">Gerar agora</button></div></div>
       <div class="mut">Chega sozinho às 7h, com notificação no celular. Por voz: diga "bom dia".</div>
+      <div class="sbhead" style="margin-top:18px"><div class="t">📋 REVISÃO DA SEMANA</div></div>
+      <div class="card"><div class="mut" id="reviewDay"></div><div id="reviewText" class="digest"></div>
+        <div class="btnrow"><button class="btn" id="reviewListen">🔊 Ouvir</button><button class="btn ghost" id="reviewNow">Gerar agora</button></div></div>
+      <div class="mut">Chega sozinha todo domingo às 18h.</div>
     </section>
 
     <!-- SECOND BRAIN -->
@@ -176,6 +188,13 @@
         <textarea class="inp" id="cfgTopics" rows="7" placeholder="um assunto por linha"></textarea>
         <div class="btnrow"><button class="btn" id="topicsSave">Salvar assuntos</button></div>
       </div>
+      <div class="card" id="playbookCard">
+        <h3>Regras do Health (suas premissas)</h3>
+        <div class="mut" style="margin-bottom:8px">É assim que o Health pensa: prioridades, saúde, dinheiro, trabalho. Edite como quiser; ele passa a seguir na hora.</div>
+        <textarea class="inp" id="playbookTxt" rows="14"></textarea>
+        <div class="grid2" style="margin-top:8px"><div><label>Hora do remédio (lembrete)</label><input class="inp" id="medHour" type="number" min="5" max="20" value="9"></div></div>
+        <div class="btnrow"><button class="btn" id="playbookSave">Salvar regras</button><button class="btn ghost" id="playbookReset">Restaurar padrão</button></div>
+      </div>
       <div class="card">
         <h3>Notificações</h3>
         <div class="mut">O briefing das 7h e os avisos chegam como notificação neste celular.</div>
@@ -215,6 +234,7 @@
 <script src="agenda.js"></script>
 <script src="inbox.js"></script>
 <script src="news.js"></script>
+<script src="tasks.js"></script>
 <script src="main.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 const CACHE = "health-v2";
 const SHELL = ["./", "./index.html", "./app.css", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png",
-  "./core.js", "./voice.js", "./brain.js", "./health.js", "./agenda.js", "./inbox.js", "./news.js", "./main.js"];
+  "./core.js", "./voice.js", "./brain.js", "./health.js", "./agenda.js", "./inbox.js", "./news.js", "./tasks.js", "./main.js"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(SHELL.map((u) => c.add(u)))).then(() => self.skipWaiting()));

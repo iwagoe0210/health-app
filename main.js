@@ -56,7 +56,7 @@ async function afterLogin() {
   renderGraph(); renderHealth(); renderCfg();
   if (remote()) {
     loadOura(false).then(renderOura).catch(() => {});
-    refreshAgenda(false); refreshInbox(false, true); refreshNews(false);
+    refreshAgenda(false); refreshInbox(false, true); refreshNews(false); loadTasks(); loadReminders(); loadReview();
     setInterval(() => { refreshInbox(true, true); }, 15 * 60000);
     setInterval(() => { refreshAgenda(true); }, 10 * 60000);
   }
@@ -81,7 +81,7 @@ function showTab(name) {
   if (name === "agenda") refreshAgenda(false);
   if (name === "inbox") refreshInbox(false, true);
   if (name === "news") refreshNews(false);
-  if (name === "digest") { loadDigest(false).then(renderDigest).catch(renderDigest); }
+  if (name === "digest") { loadDigest(false).then(renderDigest).catch(renderDigest); loadReview(); }
   if (name === "cfg") renderCfg();
   $(".tab.on").scrollTop = 0;
 }
@@ -120,6 +120,9 @@ async function localCommand(text) {
   if (/(minha agenda|o que (eu )?tenho (pra |para )?hoje|compromissos de hoje|agenda de hoje)/.test(t)) return work(agendaToday);
   if (/(tem|algum).*(e-?mail).*(importante|urgente)|e-?mails? importantes?/.test(t)) return work(() => inboxAnswer("importante"));
   if (/(minhas contas|contas a pagar|o que vence|vencimentos?|contas pendentes)/.test(t)) return work(billsAnswer);
+  if (/(meus lembretes|quais lembretes|lembretes ativos)/.test(t)) return work(remindersAnswer);
+  if (/(minhas tarefas|o que (eu )?tenho (pra|para) fazer|tarefas (abertas|pendentes))/.test(t)) return work(tasksAnswer);
+  if (/(revisao da semana|como foi a semana)/.test(t)) return work(async () => { await loadReview(); return $("#reviewText").textContent; });
   if (/(meus e-?mails|meu e-?mail|caixa de entrada)/.test(t)) return work(() => inboxAnswer());
   if (/^(me (de|fala|conta) )?(as )?noticias/.test(t)) {
     const nm = t.match(/noticias(?: de| sobre| do| da| dos| das)? ?(.*)$/);
@@ -162,6 +165,8 @@ async function handle(text) {
     if (remote()) {
       const r = await API.fn("/chat", { body: { messages: S.hist } });
       out = r.reply; proposals = r.proposals || [];
+      if (r.tasksAdded || (r.tasksDone || []).length) loadTasks();
+      if ((r.done || []).length) { loadReminders(); if (r.done.some((x) => /^Agendado|^Compromisso apagado/.test(x))) refreshAgenda(true); if (r.done.some((x) => /^Conta marcada/.test(x))) refreshInbox(true, true); toast(r.done.join(" · ")); }
       if (r.saved && r.saved.length) { await loadAll(); S.flashId = r.saved[0]; renderGraph(); }
     } else {
       const key = LS.get("health_key", "");
@@ -219,7 +224,7 @@ $("#medTake").addEventListener("click", async () => { await addMed(); const m = 
 /* ---------- atalhos ---------- */
 function renderChips() {
   const items = remote()
-    ? ["Bom dia", "Minha agenda", "Meus e-mails", "Minhas contas", "Como dormi?", "Notícias"]
+    ? ["Bom dia", "Minha agenda", "Meus e-mails", "Minhas contas", "Minhas tarefas", "Como dormi?"]
     : ["Como estou de saúde?", "Quais são minhas metas?", "O que você sabe fazer?"];
   $("#chips").innerHTML = items.map((t) => '<button class="chip">' + esc(t) + "</button>").join("");
   $$("#chips .chip").forEach((c) => c.addEventListener("click", () => handle(c.textContent)));
@@ -241,6 +246,8 @@ async function loadSettings() {
   try {
     settings = await API.fn("/settings");
     if (settings.model_level) $("#cfgModel").value = settings.model_level;
+    if (settings.playbook) $("#playbookTxt").value = settings.playbook;
+    if (settings.med_hour) $("#medHour").value = settings.med_hour;
     $("#cfgVoiceProv").value = settings.tts_provider || "google";
     fillVoices($("#cfgVoiceProv").value, settings.tts_voice);
     if (settings.news_topics) $("#cfgTopics").value = settings.news_topics.join("\n");
