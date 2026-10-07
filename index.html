@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#04070f">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Health</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="screen" id="boot">
+  <div class="logo" id="bootName">HEALTH</div>
+  <div class="hr"></div>
+  <div class="blink">SINCRONIZANDO DADOS...</div>
+  <div class="ver">v2.0 · SECRETÁRIA</div>
+</div>
+
+<div class="screen out hide" id="activate">
+  <div class="logo" id="actName">HEALTH</div>
+  <div class="hr"></div>
+  <button class="btn-act" id="btnActivate">► ATIVAR SISTEMA</button>
+  <div class="blink">TOQUE PARA INICIAR</div>
+</div>
+
+<div id="app" class="hide">
+  <div class="top">
+    <div class="nm" id="topName">HEALTH</div>
+    <div class="sp"></div>
+    <div class="pill" id="topPill">pronto</div>
+  </div>
+  <main>
+    <!-- INÍCIO -->
+    <section class="tab on" id="tab-home">
+      <div class="stage">
+        <div class="orbwrap idle" id="orb"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="orb"></div></div>
+        <div class="status" id="status">Toque no orbe ou no microfone</div>
+        <div class="you" id="you"></div>
+        <div class="reply" id="reply">Fala comigo, Renan. Posso cuidar da sua agenda, e-mails, contas, saúde e responder sobre a sua vida e os seus projetos.</div>
+        <div class="row">
+          <button class="mic" id="mic" aria-label="Falar">🎙</button>
+          <input class="txt" id="txt" placeholder="ou digite e tecle Enter" autocomplete="off">
+          <button class="small" id="stop" aria-label="Parar a fala">⏹</button>
+        </div>
+        <div class="chips" id="chips"></div>
+      </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section class="tab" id="tab-agenda">
+      <div class="sbhead"><div class="t">📅 AGENDA</div><div class="c"></div>
+        <button class="small tiny" id="evAdd" aria-label="Novo compromisso">+</button>
+        <button class="small tiny" id="agendaRefresh" aria-label="Atualizar">↻</button></div>
+      <div id="agendaBox"></div>
+    </section>
+
+    <!-- CAIXA -->
+    <section class="tab" id="tab-inbox">
+      <div class="sbhead"><div class="t">✉️ CAIXA</div><div class="c"></div>
+        <button class="small tiny" id="inboxRefresh" aria-label="Atualizar">↻</button></div>
+      <div id="inboxBox"></div>
+    </section>
+
+    <!-- SAÚDE -->
+    <section class="tab" id="tab-health">
+      <h2>Oura</h2>
+      <div class="card" id="ouraBox"></div>
+      <h2>Pressão e remédio</h2>
+      <div class="card">
+        <h3>Registrar pressão</h3>
+        <div class="grid2">
+          <div><label>Sistólica (máxima)</label><input class="inp" id="bpS" type="number" inputmode="numeric" placeholder="120"></div>
+          <div><label>Diastólica (mínima)</label><input class="inp" id="bpD" type="number" inputmode="numeric" placeholder="80"></div>
+          <div><label>Pulso (opcional)</label><input class="inp" id="bpP" type="number" inputmode="numeric" placeholder="70"></div>
+          <div><label>Obs. (opcional)</label><input class="inp" id="bpN" placeholder="após café, em jejum..."></div>
+        </div>
+        <div class="btnrow"><button class="btn" id="bpSave">Salvar medição</button><button class="btn ghost" id="medTake">💊 Tomei o remédio</button></div>
+        <div class="mut" style="margin-top:8px">Por voz: diga "registrar pressão 12 por 8".</div>
+      </div>
+      <div class="card"><h3>Últimas medições</h3><div id="bpChart"></div><div id="bpList"></div></div>
+      <div class="card"><h3>Remédio</h3><div id="medList" class="mut"></div></div>
+      <div class="foot">O Health organiza e mostra tendências. Não substitui médico. Pressão acima de 180/120, dor no peito, falta de ar ou mal-estar forte: procure atendimento.</div>
+    </section>
+
+    <!-- MAIS -->
+    <section class="tab" id="tab-more">
+      <h2>Mais</h2>
+      <button class="menu" data-go="digest"><span>☀️</span><div><b>Briefing do dia</b><small>Seu resumo falado da manhã</small></div></button>
+      <button class="menu" data-go="brain"><span>🧠</span><div><b>Second Brain</b><small>O que o Health sabe sobre você</small></div></button>
+      <button class="menu" data-go="news"><span>📰</span><div><b>Notícias</b><small>Seus assuntos, em manchetes</small></div></button>
+      <button class="menu" data-go="cfg"><span>⚙️</span><div><b>Configurações</b><small>Contas, voz, notificações, backup</small></div></button>
+    </section>
+
+    <!-- DIGEST -->
+    <section class="tab" id="tab-digest">
+      <div class="sbhead"><button class="small tiny" data-go="more" aria-label="Voltar">←</button><div class="t">☀️ BRIEFING DO DIA</div></div>
+      <div class="card"><div class="mut" id="digestDay"></div><div id="digestText" class="digest"></div>
+        <div class="btnrow"><button class="btn" id="digestListen">🔊 Ouvir</button><button class="btn ghost" id="digestNow">Gerar agora</button></div></div>
+      <div class="mut">Chega sozinho às 7h, com notificação no celular. Por voz: diga "bom dia".</div>
+    </section>
+
+    <!-- SECOND BRAIN -->
+    <section class="tab" id="tab-brain">
+      <div class="sbhead">
+        <button class="small tiny" data-go="more" aria-label="Voltar">←</button>
+        <div class="t">🧠 SECOND BRAIN</div>
+        <div class="c" id="sbCount"></div>
+        <button class="small tiny" id="sbAdd" aria-label="Nova nota">+</button>
+        <button class="small tiny" id="sbReload" aria-label="Recarregar">↻</button>
+      </div>
+      <div class="graph" id="graph"></div>
+      <div class="legend" id="legend"></div>
+      <div class="card hide" id="sbEmpty">
+        <h3>Seu Second Brain está vazio</h3>
+        <div class="mut">Importe o arquivo <b>seed-secondbrain.json</b> (está na pasta privado do seu Drive) para carregar suas notas.</div>
+        <div class="btnrow"><button class="btn" id="sbImportBtn">Importar notas</button></div>
+      </div>
+    </section>
+
+    <!-- NOTÍCIAS -->
+    <section class="tab" id="tab-news">
+      <div class="sbhead"><button class="small tiny" data-go="more" aria-label="Voltar">←</button><div class="t">📰 NOTÍCIAS</div><div class="c"></div>
+        <button class="small tiny" id="newsRefresh" aria-label="Atualizar">↻</button></div>
+      <div id="newsBox"></div>
+    </section>
+
+    <!-- CONFIG -->
+    <section class="tab" id="tab-cfg">
+      <div class="sbhead"><button class="small tiny" data-go="more" aria-label="Voltar">←</button><div class="t">⚙️ CONFIGURAÇÕES</div></div>
+      <div class="card">
+        <h3>Servidor</h3>
+        <div class="mut" id="srvState"></div>
+        <div class="btnrow" id="cfgRemote"><button class="btn ghost" id="logoutBtn">Sair da conta</button></div>
+      </div>
+      <div class="card">
+        <h3>Cérebro e voz</h3>
+        <div id="cfgLocal"><label>Chave da API da Anthropic (modo local)</label>
+          <input class="inp" id="cfgKey" type="password" placeholder="sk-ant-..." autocomplete="off">
+          <div class="foot" style="margin:6px 0 10px">Fica só neste aparelho. Com o servidor ativado, a chave sai do celular.</div></div>
+        <label>Nível</label>
+        <select class="inp" id="cfgModel"></select>
+        <label style="margin-top:10px">Voz</label>
+        <select class="inp" id="cfgVoiceMode"><option value="server">Natural (servidor)</option><option value="browser">Do navegador</option></select>
+        <label style="margin-top:10px">Motor da voz natural</label>
+        <select class="inp" id="cfgVoiceProv"><option value="google">Google (Chirp 3 HD)</option><option value="elevenlabs">ElevenLabs (mordomo britânico)</option></select>
+        <label style="margin-top:10px">Voz</label>
+        <select class="inp" id="cfgVoiceName"></select>
+        <div class="btnrow"><button class="btn" id="cfgSave">Salvar</button><button class="btn ghost" id="cfgVoiceTest">Testar voz</button></div>
+      </div>
+      <div class="card" id="googleCard">
+        <h3>Contas de e-mail e agenda</h3>
+        <div id="gAccounts" class="mut"></div>
+        <h3 style="margin-top:14px">+ Conta Google (Gmail e Agenda)</h3>
+        <div class="grid2">
+          <div><label>Apelido</label><input class="inp" id="gLabel" placeholder="Pessoal"></div>
+          <div><label>Cor</label><input class="inp" id="gColor" type="color" value="#19c3ff" style="padding:4px;height:44px"></div>
+        </div>
+        <div class="btnrow"><button class="btn" id="gAdd">Conectar conta Google</button></div>
+        <h3 style="margin-top:18px">+ Outro e-mail (IMAP: Locaweb e similares)</h3>
+        <label>E-mail</label><input class="inp" id="iEmail" type="email" placeholder="renan@personalizebr.com.br" autocomplete="off">
+        <label style="margin-top:8px">Senha do e-mail</label><input class="inp" id="iPass" type="password" autocomplete="new-password">
+        <div class="grid2" style="margin-top:8px">
+          <div><label>Servidor IMAP</label><input class="inp" id="iHost" value="email-ssl.com.br"></div>
+          <div><label>Apelido</label><input class="inp" id="iLabel" placeholder="Personalize BR"></div>
+        </div>
+        <label style="margin-top:8px">Cor</label><input class="inp" id="iColor" type="color" value="#8b7cff" style="padding:4px;height:44px">
+        <div class="btnrow"><button class="btn" id="iAdd">Conectar e-mail</button></div>
+        <div class="foot">Só leitura: o Health nunca envia, responde, apaga nem marca e-mails como lidos. A senha fica guardada no seu servidor privado. Compromissos só são criados na agenda "Health", com a sua confirmação. A agenda funciona só com contas Google.</div>
+      </div>
+      <div class="card">
+        <h3>Assuntos das notícias</h3>
+        <textarea class="inp" id="cfgTopics" rows="7" placeholder="um assunto por linha"></textarea>
+        <div class="btnrow"><button class="btn" id="topicsSave">Salvar assuntos</button></div>
+      </div>
+      <div class="card">
+        <h3>Notificações</h3>
+        <div class="mut">O briefing das 7h e os avisos chegam como notificação neste celular.</div>
+        <div class="btnrow"><button class="btn" id="pushOn">Ativar neste aparelho</button><button class="btn ghost" id="pushTest">Testar</button></div>
+      </div>
+      <div class="card">
+        <h3>Dados</h3>
+        <div class="btnrow">
+          <button class="btn ghost" id="exportBtn">Exportar backup</button>
+          <button class="btn ghost" id="importBtn">Importar notas/backup</button>
+          <button class="btn red" id="resetChat">Limpar conversa</button>
+        </div>
+        <input type="file" id="fileIn" accept="application/json,.json" class="hide">
+      </div>
+      <div class="card hide" id="installCard">
+        <h3>Instalar no celular</h3>
+        <div class="btnrow"><button class="btn" id="installBtn">Instalar app</button></div>
+      </div>
+    </section>
+  </main>
+  <nav>
+    <button data-tab="home" class="on"><span class="ic">◉</span>Início</button>
+    <button data-tab="agenda"><span class="ic">📅</span>Agenda</button>
+    <button data-tab="inbox"><span class="ic">✉️</span>Caixa<i class="badge hide" id="navBadge">0</i></button>
+    <button data-tab="health"><span class="ic">❤</span>Saúde</button>
+    <button data-tab="more"><span class="ic">☰</span>Mais</button>
+  </nav>
+</div>
+
+<div class="modal hide" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script src="voice.js"></script>
+<script src="brain.js"></script>
+<script src="health.js"></script>
+<script src="agenda.js"></script>
+<script src="inbox.js"></script>
+<script src="news.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

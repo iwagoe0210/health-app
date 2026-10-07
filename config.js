@@ -1,0 +1,1 @@
+window.HEALTH_CFG = { url: "https://njebvkolcrlterydzzaa.supabase.co", anon: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qZWJ2a29sY3JsdGVyeWR6emFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzOTAyNjksImV4cCI6MjEwNjk2NjI2OX0.Jr5OGwAUqustx0DOGrsUu-d3GwFekF7fbh3FFb7n_cE" };
